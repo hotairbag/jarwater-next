@@ -29,7 +29,7 @@ export const Portfolio = ({ isStandalone = true }: PortfolioProps) => {
       id: "1",
       title: "Miami Magic Journey",
       category: "Brand Film",
-      image: "https://picsum.photos/id/132/800/600",
+      image: "https://i.vimeocdn.com/video/2101757970-f4e0e0b52e03e22598f2060eeb275e7a459e0f2a7f824659c82b313a0ad2ea99-d_1280x720",
       description: "A vibrant visual journey through Miami's magic.",
       vimeoId: "1150790609",
     },
