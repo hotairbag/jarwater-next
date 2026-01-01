@@ -167,8 +167,8 @@ export const Navigation = () => {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-[73px] bg-zinc-950/95 backdrop-blur-lg z-40">
-          <div className="flex flex-col px-6 py-8 h-full overflow-y-auto">
+        <div className="md:hidden fixed left-0 right-0 top-[73px] h-[calc(100vh-73px)] bg-zinc-950 z-50 overflow-y-auto">
+          <div className="flex flex-col px-6 py-8">
             {/* Services Accordion */}
             <div className="border-b border-zinc-800">
               <button
