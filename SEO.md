@@ -50,15 +50,13 @@ twitter: {
 
 ### JSON-LD Structured Data
 
-Implemented via `src/lib/schema.ts` and `src/components/SchemaScript.tsx`:
+Implemented via `src/lib/schema.ts`:
 
-1. **Organization Schema** - Company info, logo, contact, social links
-2. **WebSite Schema** - Site name, URL, publisher info
-
-Additional schemas available:
-- `getServiceSchema()` - For service pages
-- `getBreadcrumbSchema()` - For navigation hierarchy
-- `getVideoSchema()` - For portfolio videos
+1. **Organization Schema** - Company info, logo, email contact (homepage)
+2. **WebSite Schema** - Site name, URL, publisher info (homepage)
+3. **Service Schema** - Applied to all service pages (explainers, motion-graphics, digital-ads)
+4. **BreadcrumbList Schema** - Navigation hierarchy on service pages
+5. **VideoObject Schema** - Featured video on portfolio/work page
 
 ### Sitemap & Robots
 
@@ -116,22 +114,21 @@ OG images are generated dynamically using `next/og` (ImageResponse) via an API r
 
 **Important for Cloudflare Workers:** The API route uses `runtime = "nodejs"` explicitly, as edge runtime is not supported by `@opennextjs/cloudflare` for API routes.
 
-### Static Assets
+### Icons & Favicons
 
-| Asset | Location | Status |
-|-------|----------|--------|
-| Favicon | `/public/favicon.svg` | Implemented |
+| Asset | Location | Size | Status |
+|-------|----------|------|--------|
+| Favicon (PNG) | `src/app/icon.tsx` | 32x32 | Dynamic (Node.js) |
+| Apple Touch Icon | `src/app/apple-icon.tsx` | 180x180 | Dynamic (Node.js) |
+| Favicon (SVG) | `/public/favicon.svg` | N/A | Legacy fallback |
 
-### Optional Improvements
+Both dynamic icons use `next/og` ImageResponse and are generated on-demand with the Jarwater logo design.
 
-1. **Apple Touch Icon** (`apple-touch-icon.png`)
-   - Size: 180x180px
-   - Currently using favicon.svg fallback
+### Optional Future Improvements
 
-2. **Multiple Favicon Formats**
-   - `favicon.ico` for legacy browsers
+1. **Multiple Favicon Formats** (for PWA support)
    - `icon-192.png` for Android
-   - `icon-512.png` for PWA
+   - `icon-512.png` for PWA manifest
 
 ---
 
@@ -159,50 +156,30 @@ Implemented accessibility improvements that also benefit SEO:
 
 ## Remaining SEO Improvements
 
-### High Priority
-
-1. **Remove `unoptimized` flag from Portfolio images**
-   - File: `src/components/Portfolio.tsx`
-   - Enable Next.js image optimization for better Core Web Vitals
-
-2. **Replace placeholder social links in Footer**
-   - Current links use `href="#"`
-   - Add real Vimeo, Instagram, LinkedIn URLs
-
-### Medium Priority
-
-3. **Add VideoObject schema to portfolio**
-   - Each portfolio video should have structured data
-   - Improves video discovery in Google
-
-4. **Add Service schemas to service pages**
-   - Use `getServiceSchema()` from `src/lib/schema.ts`
-
-5. **Add BreadcrumbList schema**
-   - Service pages: Home > Services > [Service Name]
-
-6. **Add Apple Touch Icon**
-   - Create 180x180px PNG for iOS devices
-
 ### Low Priority
 
-7. **Add FAQ schema if FAQ content is added**
+1. **Add FAQ schema if FAQ content is added**
 
-8. **Review and update alt text to be more descriptive**
+2. **Review and update alt text to be more descriptive**
 
-9. **Portfolio video thumbnails as OG images**
+3. **Portfolio video thumbnails as OG images**
    - Each portfolio item could have its own OG image using the video thumbnail
+
+4. **PWA manifest with larger icons**
+   - Add 192x192 and 512x512 icons for Android/PWA support
 
 ---
 
 ## Files Reference
 
 ### SEO Configuration Files
-- `src/app/sitemap.ts` - Dynamic sitemap generation
+- `src/app/sitemap.ts` - Dynamic sitemap generation (84 URLs)
 - `src/app/robots.ts` - Robots.txt configuration
 - `src/lib/schema.ts` - JSON-LD schema utilities
 - `src/components/SchemaScript.tsx` - Schema injection component
 - `src/app/api/og/route.tsx` - Dynamic OG image generation
+- `src/app/icon.tsx` - Dynamic 32x32 favicon
+- `src/app/apple-icon.tsx` - Dynamic 180x180 Apple Touch Icon
 
 ### Layout & Metadata
 - `src/app/[locale]/layout.tsx` - Main layout with OG/Twitter/icons
