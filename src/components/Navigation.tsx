@@ -4,13 +4,33 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const Navigation = () => {
   const pathname = usePathname();
   const locale = useLocale();
   const t = useTranslations("nav");
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsMobileServicesOpen(false);
+  }, [pathname]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
 
   const navItems = [
     { label: t("work"), href: `/${locale}/work` },
@@ -56,6 +76,7 @@ export const Navigation = () => {
         </span>
       </Link>
 
+      {/* Desktop Navigation */}
       <div className="hidden md:flex items-center gap-8">
         {/* Services Dropdown */}
         <div
@@ -64,7 +85,7 @@ export const Navigation = () => {
           onMouseLeave={() => setIsServicesOpen(false)}
         >
           <button
-            className="text-sm uppercase tracking-widest text-zinc-400 hover:text-white transition-all duration-300 flex items-center gap-1"
+            className="text-sm uppercase tracking-widest text-zinc-400 hover:text-white transition-all duration-300 flex items-center gap-1 py-2"
             aria-expanded={isServicesOpen}
             aria-haspopup="true"
             aria-label={`${t("services")} menu`}
@@ -81,23 +102,25 @@ export const Navigation = () => {
             </svg>
           </button>
           {isServicesOpen && (
-            <ul className="absolute left-0 mt-2 w-56 py-2 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl" role="menu">
-              {serviceItems.map((item) => (
-                <li key={item.href} role="none">
-                  <Link
-                    role="menuitem"
-                    href={item.href}
-                    className={`block px-4 py-2 text-sm transition-colors ${
-                      pathname === item.href
-                        ? "text-indigo-400 bg-zinc-800"
-                        : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <div className="absolute left-0 top-full pt-2">
+              <ul className="w-56 py-2 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl" role="menu">
+                {serviceItems.map((item) => (
+                  <li key={item.href} role="none">
+                    <Link
+                      role="menuitem"
+                      href={item.href}
+                      className={`block px-4 py-2 text-sm transition-colors ${
+                        pathname === item.href
+                          ? "text-indigo-400 bg-zinc-800"
+                          : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
 
@@ -118,15 +141,88 @@ export const Navigation = () => {
         <LanguageSwitcher />
       </div>
 
-      <div className="md:hidden flex items-center gap-4">
-        <LanguageSwitcher />
-        <Link
-          href={`/${locale}/contact`}
-          className="text-sm uppercase tracking-widest text-white"
-        >
-          {t("getInTouch")}
-        </Link>
-      </div>
+      {/* Mobile Hamburger Button */}
+      <button
+        className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5"
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={isMobileMenuOpen}
+      >
+        <span
+          className={`block w-6 h-0.5 bg-white transition-all duration-300 ${
+            isMobileMenuOpen ? "rotate-45 translate-y-2" : ""
+          }`}
+        />
+        <span
+          className={`block w-6 h-0.5 bg-white transition-all duration-300 ${
+            isMobileMenuOpen ? "opacity-0" : ""
+          }`}
+        />
+        <span
+          className={`block w-6 h-0.5 bg-white transition-all duration-300 ${
+            isMobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
+          }`}
+        />
+      </button>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden fixed inset-0 top-[73px] bg-zinc-950/95 backdrop-blur-lg z-40">
+          <div className="flex flex-col px-6 py-8 h-full overflow-y-auto">
+            {/* Services Accordion */}
+            <div className="border-b border-zinc-800">
+              <button
+                className="w-full flex justify-between items-center py-4 text-lg text-white"
+                onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
+                aria-expanded={isMobileServicesOpen}
+              >
+                {t("services")}
+                <svg
+                  className={`w-5 h-5 transition-transform ${isMobileServicesOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {isMobileServicesOpen && (
+                <div className="pb-4 pl-4 space-y-3">
+                  {serviceItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`block py-2 text-base ${
+                        pathname === item.href ? "text-indigo-400" : "text-zinc-400"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Other Nav Items */}
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`py-4 text-lg border-b border-zinc-800 ${
+                  pathname === item.href ? "text-indigo-400" : "text-white"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+
+            {/* Language Switcher */}
+            <div className="pt-6">
+              <LanguageSwitcher />
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
