@@ -141,6 +141,8 @@ Implemented accessibility improvements that also benefit SEO:
 - Services dropdown has `aria-expanded`, `aria-haspopup`
 - Dropdown uses semantic `<ul>`/`<li>` with ARIA roles
 - SVGs marked with `aria-hidden="true"`
+- Mobile hamburger menu with `aria-label` and `aria-expanded`
+- Mobile menu closes on route change, prevents body scroll when open
 
 ### Portfolio Modal
 - Modal has `role="dialog"`, `aria-modal="true"`, `aria-labelledby`
@@ -184,6 +186,10 @@ Implemented accessibility improvements that also benefit SEO:
 ### Layout & Metadata
 - `src/app/[locale]/layout.tsx` - Main layout with OG/Twitter/icons
 - `src/app/[locale]/*/page.tsx` - Page-specific metadata
+
+### Components
+- `src/components/Navigation.tsx` - Responsive nav with mobile hamburger menu
+- `src/components/Footer.tsx` - Footer with email contact
 
 ### Translation Files
 - `messages/*.json` - Localized metadata in each language file
