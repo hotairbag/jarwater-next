@@ -1,14 +1,21 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 export const Services = () => {
+  const t = useTranslations("process");
+  const tCap = useTranslations("capabilities");
+
   return (
     <div className="bg-zinc-950 py-24 px-6 md:px-12 max-w-7xl mx-auto border-b border-zinc-900">
       {/* Process / How we work */}
       <div className="mb-32">
         <span className="text-indigo-400 font-mono text-xs tracking-widest uppercase mb-6 block">
-          Our Process
+          {t("label")}
         </span>
         <h2 className="text-3xl md:text-5xl font-serif text-white mb-16 max-w-3xl leading-tight">
-          We distill complex ideas into{" "}
-          <span className="italic text-zinc-500">moving art</span>.
+          {t("title")}{" "}
+          <span className="italic text-zinc-500">{t("titleHighlight")}</span>.
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
@@ -21,12 +28,10 @@ export const Services = () => {
             </div>
             <div>
               <h3 className="text-xl font-bold text-white mb-3">
-                Discovery & Script
+                {t("step1Title")}
               </h3>
               <p className="text-zinc-400 font-light leading-relaxed text-sm">
-                We dive deep into your brand&apos;s core message. We craft
-                scripts that speak to your audience and define the visual
-                language before a single pixel is pushed.
+                {t("step1Description")}
               </p>
             </div>
           </div>
@@ -36,12 +41,10 @@ export const Services = () => {
             </div>
             <div>
               <h3 className="text-xl font-bold text-white mb-3">
-                Style & Storyboard
+                {t("step2Title")}
               </h3>
               <p className="text-zinc-400 font-light leading-relaxed text-sm">
-                Every frame is designed intentionally. We build comprehensive
-                style frames and storyboards to ensure the vision aligns
-                perfectly with your brand guidelines.
+                {t("step2Description")}
               </p>
             </div>
           </div>
@@ -51,12 +54,10 @@ export const Services = () => {
             </div>
             <div>
               <h3 className="text-xl font-bold text-white mb-3">
-                Animation & Sound
+                {t("step3Title")}
               </h3>
               <p className="text-zinc-400 font-light leading-relaxed text-sm">
-                The magic happens here. We breathe life into static assets with
-                fluid motion and immersive sound design for a broadcast-ready
-                finish.
+                {t("step3Description")}
               </p>
             </div>
           </div>
@@ -66,7 +67,7 @@ export const Services = () => {
       {/* Services Categories */}
       <div>
         <span className="text-indigo-400 font-mono text-xs tracking-widest uppercase mb-12 block">
-          Capabilities
+          {tCap("label")}
         </span>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="group bg-zinc-900/20 p-8 border border-zinc-800 hover:border-indigo-900/50 hover:bg-zinc-900/40 transition-all duration-500">
@@ -85,24 +86,23 @@ export const Services = () => {
               </svg>
             </div>
             <h3 className="text-2xl font-serif text-white mb-4">
-              Animated Explainers
+              {tCap("explainersTitle")}
             </h3>
             <p className="text-zinc-400 font-light mb-8 text-sm leading-relaxed min-h-[80px]">
-              Clarify your product or service. We turn technical manuals and
-              abstract concepts into engaging narratives that drive conversion.
+              {tCap("explainersDescription")}
             </p>
             <ul className="text-xs text-zinc-500 space-y-3 font-mono border-t border-zinc-800 pt-6 group-hover:border-indigo-900/30 transition-colors">
               <li className="flex items-center gap-2">
                 <span className="w-1 h-1 bg-indigo-500 rounded-full"></span>
-                Product Demos
+                {tCap("explainersItem1")}
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-1 h-1 bg-indigo-500 rounded-full"></span>
-                SaaS Walkthroughs
+                {tCap("explainersItem2")}
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-1 h-1 bg-indigo-500 rounded-full"></span>
-                Educational Series
+                {tCap("explainersItem3")}
               </li>
             </ul>
           </div>
@@ -128,25 +128,23 @@ export const Services = () => {
               </svg>
             </div>
             <h3 className="text-2xl font-serif text-white mb-4">
-              Motion Graphics
+              {tCap("motionTitle")}
             </h3>
             <p className="text-zinc-400 font-light mb-8 text-sm leading-relaxed min-h-[80px]">
-              Elevate your brand identity. From logo animations to full
-              broadcast packages, we create systems of movement that define your
-              brand.
+              {tCap("motionDescription")}
             </p>
             <ul className="text-xs text-zinc-500 space-y-3 font-mono border-t border-zinc-800 pt-6 group-hover:border-indigo-900/30 transition-colors">
               <li className="flex items-center gap-2">
                 <span className="w-1 h-1 bg-indigo-500 rounded-full"></span>
-                Logo Animation
+                {tCap("motionItem1")}
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-1 h-1 bg-indigo-500 rounded-full"></span>
-                Brand Systems
+                {tCap("motionItem2")}
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-1 h-1 bg-indigo-500 rounded-full"></span>
-                Event Visuals
+                {tCap("motionItem3")}
               </li>
             </ul>
           </div>
@@ -166,24 +164,22 @@ export const Services = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-serif text-white mb-4">Digital Ads</h3>
+            <h3 className="text-2xl font-serif text-white mb-4">{tCap("adsTitle")}</h3>
             <p className="text-zinc-400 font-light mb-8 text-sm leading-relaxed min-h-[80px]">
-              Stop the scroll. We produce high-octane, short-form content
-              optimized for social media performance and digital marketing
-              campaigns.
+              {tCap("adsDescription")}
             </p>
             <ul className="text-xs text-zinc-500 space-y-3 font-mono border-t border-zinc-800 pt-6 group-hover:border-indigo-900/30 transition-colors">
               <li className="flex items-center gap-2">
                 <span className="w-1 h-1 bg-indigo-500 rounded-full"></span>
-                Social Shorts
+                {tCap("adsItem1")}
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-1 h-1 bg-indigo-500 rounded-full"></span>
-                Performance Marketing
+                {tCap("adsItem2")}
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-1 h-1 bg-indigo-500 rounded-full"></span>
-                Teasers & Promos
+                {tCap("adsItem3")}
               </li>
             </ul>
           </div>

@@ -1,7 +1,7 @@
 export interface Project {
   id: string;
   title: string;
-  category: 'Explainer' | 'Commercial' | 'Brand Film' | '3D Motion';
+  category: string;
   image: string;
   description: string;
 }

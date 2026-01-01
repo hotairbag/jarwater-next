@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { ContactFormState, BUDGET_RANGES } from "@/types";
+import { useTranslations } from "next-intl";
+import { ContactFormState } from "@/types";
 import { sendContactEmail } from "@/app/actions/contact";
 
 export const Contact = () => {
+  const t = useTranslations("contact");
+
   const [formData, setFormData] = useState<ContactFormState>({
     name: "",
     email: "",
@@ -16,6 +19,14 @@ export const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const budgetOptions = [
+    { value: "", label: t("budgetPlaceholder") },
+    { value: "under5k", label: t("budgetOption1") },
+    { value: "5k-15k", label: t("budgetOption2") },
+    { value: "15k-50k", label: t("budgetOption3") },
+    { value: "50k+", label: t("budgetOption4") },
+  ];
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -38,7 +49,7 @@ export const Contact = () => {
     if (result.success) {
       setSubmitted(true);
     } else {
-      setError(result.error || "Something went wrong");
+      setError(result.error || t("errorMessage"));
     }
     setIsSubmitting(false);
   };
@@ -47,17 +58,16 @@ export const Contact = () => {
     return (
       <div className="min-h-screen pt-32 flex flex-col items-center justify-center px-6">
         <h2 className="text-4xl md:text-5xl font-serif text-white mb-6 text-center">
-          Message Received.
+          {t("successTitle")}
         </h2>
         <p className="text-zinc-400 max-w-md text-center mb-8">
-          Thank you for reaching out to Jarwater. We are reviewing your project
-          details and will be in touch within 24 hours.
+          {t("successMessage")}
         </p>
         <button
           onClick={() => setSubmitted(false)}
           className="text-indigo-400 border-b border-indigo-400 pb-1 hover:text-white hover:border-white transition-colors"
         >
-          Send another message
+          {t("submit")}
         </button>
       </div>
     );
@@ -66,12 +76,15 @@ export const Contact = () => {
   return (
     <div className="pt-32 pb-20 px-6 md:px-12 max-w-4xl mx-auto min-h-screen">
       <div className="mb-16">
+        <span className="text-indigo-400 font-mono text-xs tracking-widest uppercase mb-4 block">
+          {t("label")}
+        </span>
         <h2 className="text-4xl md:text-6xl font-serif text-white mb-4">
-          Start a Project
+          {t("title")}{" "}
+          <span className="italic text-zinc-500">{t("titleHighlight")}</span>
         </h2>
         <p className="text-zinc-400 text-lg font-light">
-          Tell us about your vision. We handle projects from concept to final
-          render.
+          {t("subtitle")}
         </p>
       </div>
 
@@ -79,7 +92,7 @@ export const Contact = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="space-y-2">
             <label className="text-xs uppercase tracking-widest text-zinc-500 font-semibold">
-              Name
+              {t("nameLabel")}
             </label>
             <input
               required
@@ -88,13 +101,13 @@ export const Contact = () => {
               value={formData.name}
               onChange={handleChange}
               className="w-full bg-transparent border-b border-zinc-700 py-4 text-white text-xl focus:outline-none focus:border-white transition-colors placeholder-zinc-800"
-              placeholder="Your Name"
+              placeholder={t("namePlaceholder")}
             />
           </div>
 
           <div className="space-y-2">
             <label className="text-xs uppercase tracking-widest text-zinc-500 font-semibold">
-              Email
+              {t("emailLabel")}
             </label>
             <input
               required
@@ -103,7 +116,7 @@ export const Contact = () => {
               value={formData.email}
               onChange={handleChange}
               className="w-full bg-transparent border-b border-zinc-700 py-4 text-white text-xl focus:outline-none focus:border-white transition-colors placeholder-zinc-800"
-              placeholder="name@company.com"
+              placeholder={t("emailPlaceholder")}
             />
           </div>
         </div>
@@ -111,7 +124,7 @@ export const Contact = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="space-y-2">
             <label className="text-xs uppercase tracking-widest text-zinc-500 font-semibold">
-              Company
+              {t("companyLabel")}
             </label>
             <input
               type="text"
@@ -119,13 +132,13 @@ export const Contact = () => {
               value={formData.company}
               onChange={handleChange}
               className="w-full bg-transparent border-b border-zinc-700 py-4 text-white text-xl focus:outline-none focus:border-white transition-colors placeholder-zinc-800"
-              placeholder="Company Name"
+              placeholder={t("companyPlaceholder")}
             />
           </div>
 
           <div className="space-y-2">
             <label className="text-xs uppercase tracking-widest text-zinc-500 font-semibold">
-              Budget (USD)
+              {t("budgetLabel")}
             </label>
             <div className="relative">
               <select
@@ -135,13 +148,13 @@ export const Contact = () => {
                 onChange={handleChange}
                 className="w-full bg-transparent border-b border-zinc-700 py-4 text-white text-xl focus:outline-none focus:border-white transition-colors appearance-none cursor-pointer"
               >
-                {BUDGET_RANGES.map((range) => (
+                {budgetOptions.map((option) => (
                   <option
-                    key={range}
-                    value={range}
+                    key={option.value}
+                    value={option.value}
                     className="bg-zinc-900 text-white"
                   >
-                    {range}
+                    {option.label}
                   </option>
                 ))}
               </select>
@@ -166,7 +179,7 @@ export const Contact = () => {
 
         <div className="space-y-2">
           <label className="text-xs uppercase tracking-widest text-zinc-500 font-semibold">
-            Project Details
+            {t("messageLabel")}
           </label>
           <textarea
             required
@@ -175,7 +188,7 @@ export const Contact = () => {
             onChange={handleChange}
             rows={4}
             className="w-full bg-transparent border-b border-zinc-700 py-4 text-white text-xl focus:outline-none focus:border-white transition-colors placeholder-zinc-800 resize-none"
-            placeholder="Tell us about the goals, timeline, and vibe..."
+            placeholder={t("messagePlaceholder")}
           />
         </div>
 
@@ -185,7 +198,7 @@ export const Contact = () => {
             disabled={isSubmitting}
             className="bg-white text-zinc-950 px-12 py-5 font-bold uppercase tracking-widest text-sm hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto"
           >
-            {isSubmitting ? "Sending..." : "Submit Inquiry"}
+            {isSubmitting ? t("submitting") : t("submit")}
           </button>
           {error && (
             <p className="mt-4 text-red-400 text-sm">{error}</p>

@@ -2,18 +2,30 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useState } from "react";
 
 export const Navigation = () => {
   const pathname = usePathname();
+  const locale = useLocale();
+  const t = useTranslations("nav");
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
 
   const navItems = [
-    { label: "Work", href: "/work" },
-    { label: "Contact", href: "/contact" },
+    { label: t("work"), href: `/${locale}/work` },
+    { label: t("contact"), href: `/${locale}/contact` },
+  ];
+
+  const serviceItems = [
+    { label: t("explainers"), href: `/${locale}/services/explainers` },
+    { label: t("motionGraphics"), href: `/${locale}/services/motion-graphics` },
+    { label: t("digitalAds"), href: `/${locale}/services/digital-ads` },
   ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 py-6 md:px-12 md:py-8 bg-zinc-950/80 backdrop-blur-md border-b border-white/5">
-      <Link href="/" className="flex items-center gap-3 cursor-pointer group">
+      <Link href={`/${locale}`} className="flex items-center gap-3 cursor-pointer group">
         <svg
           className="w-8 h-8 text-white group-hover:text-indigo-400 transition-colors duration-300"
           viewBox="0 0 24 24"
@@ -43,7 +55,43 @@ export const Navigation = () => {
         </span>
       </Link>
 
-      <div className="hidden md:flex gap-12">
+      <div className="hidden md:flex items-center gap-8">
+        {/* Services Dropdown */}
+        <div
+          className="relative"
+          onMouseEnter={() => setIsServicesOpen(true)}
+          onMouseLeave={() => setIsServicesOpen(false)}
+        >
+          <button className="text-sm uppercase tracking-widest text-zinc-400 hover:text-white transition-all duration-300 flex items-center gap-1">
+            {t("services")}
+            <svg
+              className={`w-3 h-3 transition-transform ${isServicesOpen ? "rotate-180" : ""}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {isServicesOpen && (
+            <div className="absolute left-0 mt-2 w-56 py-2 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl">
+              {serviceItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`block px-4 py-2 text-sm transition-colors ${
+                    pathname === item.href
+                      ? "text-indigo-400 bg-zinc-800"
+                      : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+
         {navItems.map((item) => (
           <Link
             key={item.href}
@@ -57,14 +105,17 @@ export const Navigation = () => {
             {item.label}
           </Link>
         ))}
+
+        <LanguageSwitcher />
       </div>
 
-      <div className="md:hidden flex gap-4">
+      <div className="md:hidden flex items-center gap-4">
+        <LanguageSwitcher />
         <Link
-          href="/contact"
+          href={`/${locale}/contact`}
           className="text-sm uppercase tracking-widest text-white"
         >
-          Get in touch
+          {t("getInTouch")}
         </Link>
       </div>
     </nav>

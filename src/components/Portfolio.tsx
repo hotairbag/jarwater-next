@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Project } from "@/types";
 
 interface PortfolioProps {
@@ -9,6 +10,7 @@ interface PortfolioProps {
 }
 
 export const Portfolio = ({ isStandalone = true }: PortfolioProps) => {
+  const t = useTranslations("portfolio");
   const [selectedProject, setSelectedProject] = useState<
     (Project & { videoUrl?: string; vimeoId?: string }) | null
   >(null);
@@ -24,61 +26,69 @@ export const Portfolio = ({ isStandalone = true }: PortfolioProps) => {
     };
   }, [selectedProject]);
 
-  const projects: (Project & { videoUrl?: string; vimeoId?: string })[] = [
+  const projects: (Project & { videoUrl?: string; vimeoId?: string; descriptionKey: string; categoryKey: string })[] = [
     {
       id: "1",
       title: "Miami Magic Journey",
-      category: "Brand Film",
+      category: t("categoryBrandFilm"),
+      categoryKey: "categoryBrandFilm",
       image: "https://i.vimeocdn.com/video/2101757970-f4e0e0b52e03e22598f2060eeb275e7a459e0f2a7f824659c82b313a0ad2ea99-d_1280x720",
-      description: "A vibrant visual journey through Miami's magic.",
+      description: t("project1Description"),
+      descriptionKey: "project1Description",
       vimeoId: "1150790609",
     },
     {
       id: "2",
       title: "Structural Integrity",
-      category: "3D Motion",
+      category: t("category3DMotion"),
+      categoryKey: "category3DMotion",
       image: "https://picsum.photos/id/234/800/600",
-      description:
-        "Abstract architectural renders for a real estate conglomerate.",
+      description: t("project2Description"),
+      descriptionKey: "project2Description",
       videoUrl:
         "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
     },
     {
       id: "3",
       title: "The Flow State",
-      category: "Explainer",
+      category: t("categoryExplainer"),
+      categoryKey: "categoryExplainer",
       image: "https://picsum.photos/id/453/800/600",
-      description:
-        "Simplifying complex logistical algorithms through fluid 2D animation.",
+      description: t("project3Description"),
+      descriptionKey: "project3Description",
       videoUrl:
         "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
     },
     {
       id: "4",
       title: "Kinetic Type",
-      category: "Commercial",
+      category: t("categoryCommercial"),
+      categoryKey: "categoryCommercial",
       image: "https://picsum.photos/id/88/800/600",
-      description:
-        "High energy kinetic typography for a sports drink campaign.",
+      description: t("project4Description"),
+      descriptionKey: "project4Description",
       videoUrl:
         "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
     },
     {
       id: "5",
       title: "Eco Systems",
-      category: "Explainer",
+      category: t("categoryExplainer"),
+      categoryKey: "categoryExplainer",
       image: "https://picsum.photos/id/28/800/600",
-      description:
-        "Soft, organic motion graphics explaining carbon capture technology.",
+      description: t("project5Description"),
+      descriptionKey: "project5Description",
       videoUrl:
         "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
     },
     {
       id: "6",
       title: "Future Fabric",
-      category: "3D Motion",
+      category: t("category3DMotion"),
+      categoryKey: "category3DMotion",
       image: "https://picsum.photos/id/35/800/600",
-      description: "Cloth simulation and texture focus for a fashion tech brand.",
+      description: t("project6Description"),
+      descriptionKey: "project6Description",
       videoUrl:
         "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
     },
@@ -92,15 +102,15 @@ export const Portfolio = ({ isStandalone = true }: PortfolioProps) => {
         <div className="mb-20 border-b border-zinc-800 pb-8 flex flex-col md:flex-row justify-between items-end">
           <div>
             <h2 className="text-4xl md:text-6xl font-serif text-white mb-2">
-              Selected Works
+              {t("title")}
             </h2>
             <p className="text-zinc-500 font-light">
-              Curated motion pieces 2023-2024
+              {t("subtitle")}
             </p>
           </div>
           <div className="mt-4 md:mt-0 text-right hidden md:block">
             <span className="text-zinc-600 text-sm tracking-widest uppercase">
-              Jarwater Studio
+              {t("studio")}
             </span>
           </div>
         </div>
