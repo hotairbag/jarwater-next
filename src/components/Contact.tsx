@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ContactFormState, BUDGET_RANGES } from "@/types";
+import { sendContactEmail } from "@/app/actions/contact";
 
 export const Contact = () => {
   const [formData, setFormData] = useState<ContactFormState>({
@@ -14,6 +15,7 @@ export const Contact = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -26,13 +28,19 @@ export const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setError(null);
+
+    const result = await sendContactEmail(formData);
+
+    if (result.success) {
       setSubmitted(true);
-    }, 1500);
+    } else {
+      setError(result.error || "Something went wrong");
+    }
+    setIsSubmitting(false);
   };
 
   if (submitted) {
@@ -179,6 +187,9 @@ export const Contact = () => {
           >
             {isSubmitting ? "Sending..." : "Submit Inquiry"}
           </button>
+          {error && (
+            <p className="mt-4 text-red-400 text-sm">{error}</p>
+          )}
         </div>
       </form>
     </div>
