@@ -90,27 +90,44 @@ Additional schemas available:
 
 ## Image Assets
 
-### Current Status
+### Static OG Images
+
+OG images are pre-generated at build time using a Node.js script. Each page has a localized SVG image for all 14 languages (84 total images).
+
+**Generation Script:** `scripts/generate-og-images.mjs`
+
+**Image Location:** `/public/og/{page}-{locale}.svg`
+
+| Page | URL Pattern | Example |
+|------|-------------|---------|
+| Homepage | `/og/home-{locale}.svg` | `/og/home-ja.svg` |
+| Work | `/og/work-{locale}.svg` | `/og/work-en.svg` |
+| Contact | `/og/contact-{locale}.svg` | `/og/contact-ko.svg` |
+| Explainers | `/og/explainers-{locale}.svg` | `/og/explainers-fr.svg` |
+| Motion Graphics | `/og/motion-graphics-{locale}.svg` | `/og/motion-graphics-de.svg` |
+| Digital Ads | `/og/digital-ads-{locale}.svg` | `/og/digital-ads-ar.svg` |
+
+**Image Specs:**
+- Size: 1200x630px
+- Format: SVG
+- Features: Jarwater logo, localized page title, dark gradient background
+- Build: Generated automatically via `prebuild` script
+
+**Note:** Dynamic OG image generation via `next/og` API routes is not supported on Cloudflare Workers with `@opennextjs/cloudflare`, hence the static SVG approach.
+
+### Static Assets
 
 | Asset | Location | Status |
 |-------|----------|--------|
 | Favicon | `/public/favicon.svg` | Implemented |
-| Apple Touch Icon | `/public/apple-touch-icon.svg` | Placeholder (needs PNG) |
-| OG Image | `/public/og-image.svg` | Placeholder (needs PNG) |
 
-### TODO: Create Production Assets
+### Optional Improvements
 
-1. **OG Image** (`og-image.png`)
-   - Size: 1200x630px
-   - Include: Logo, tagline, brand colors
-   - Convert from SVG placeholder
-
-2. **Apple Touch Icon** (`apple-touch-icon.png`)
+1. **Apple Touch Icon** (`apple-touch-icon.png`)
    - Size: 180x180px
-   - Square with rounded corners baked in
-   - Convert from SVG placeholder
+   - Currently using favicon.svg fallback
 
-3. **Multiple Favicon Formats** (optional)
+2. **Multiple Favicon Formats**
    - `favicon.ico` for legacy browsers
    - `icon-192.png` for Android
    - `icon-512.png` for PWA
@@ -143,43 +160,37 @@ Implemented accessibility improvements that also benefit SEO:
 
 ### High Priority
 
-1. **Create production OG/social images**
-   - Replace SVG placeholders with proper PNGs
-   - Consider locale-specific OG images for major markets
-
-2. **Add per-page OG images**
-   - Service pages should have unique OG images
-   - Portfolio items could have video thumbnails as OG images
-
-3. **Remove `unoptimized` flag from Portfolio images**
+1. **Remove `unoptimized` flag from Portfolio images**
    - File: `src/components/Portfolio.tsx`
    - Enable Next.js image optimization for better Core Web Vitals
 
-### Medium Priority
-
-4. **Add VideoObject schema to portfolio**
-   - Each portfolio video should have structured data
-   - Improves video discovery in Google
-
-5. **Add Service schemas to service pages**
-   - Use `getServiceSchema()` from `src/lib/schema.ts`
-
-6. **Replace placeholder social links in Footer**
+2. **Replace placeholder social links in Footer**
    - Current links use `href="#"`
    - Add real Vimeo, Instagram, LinkedIn URLs
 
-7. **Add BreadcrumbList schema**
+### Medium Priority
+
+3. **Add VideoObject schema to portfolio**
+   - Each portfolio video should have structured data
+   - Improves video discovery in Google
+
+4. **Add Service schemas to service pages**
+   - Use `getServiceSchema()` from `src/lib/schema.ts`
+
+5. **Add BreadcrumbList schema**
    - Service pages: Home > Services > [Service Name]
+
+6. **Add Apple Touch Icon**
+   - Create 180x180px PNG for iOS devices
 
 ### Low Priority
 
-8. **Consider dynamic OG image generation**
-   - Use `next/og` ImageResponse for per-page images
-   - Create `opengraph-image.tsx` route handlers
+7. **Add FAQ schema if FAQ content is added**
 
-9. **Add FAQ schema if FAQ content is added**
+8. **Review and update alt text to be more descriptive**
 
-10. **Review and update alt text to be more descriptive**
+9. **Portfolio video thumbnails as OG images**
+   - Each portfolio item could have its own OG image using the video thumbnail
 
 ---
 
@@ -190,6 +201,7 @@ Implemented accessibility improvements that also benefit SEO:
 - `src/app/robots.ts` - Robots.txt configuration
 - `src/lib/schema.ts` - JSON-LD schema utilities
 - `src/components/SchemaScript.tsx` - Schema injection component
+- `scripts/generate-og-images.mjs` - OG image generation script
 
 ### Layout & Metadata
 - `src/app/[locale]/layout.tsx` - Main layout with OG/Twitter/icons

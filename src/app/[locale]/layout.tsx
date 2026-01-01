@@ -44,7 +44,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     icons: {
       icon: "/favicon.svg",
-      apple: "/apple-touch-icon.svg",
     },
     alternates: {
       canonical: url,
@@ -61,10 +60,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "website",
       images: [
         {
-          url: "https://jarwater.com/og-image.png",
+          url: `https://jarwater.com/og/home-${locale}.svg`,
           width: 1200,
           height: 630,
-          alt: "Jarwater Motion Studio - High-end motion design and animation",
+          alt: title,
         },
       ],
     },
@@ -72,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
-      images: ["https://jarwater.com/og-image.png"],
+      images: [`https://jarwater.com/og/home-${locale}.svg`],
     },
   };
 }

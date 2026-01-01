@@ -20,5 +20,7 @@ export const config = {
   // - API routes
   // - static files (e.g. images)
   // - _next (Next.js internals)
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
+  // - opengraph-image, twitter-image (OG image generation routes)
+  // - sitemap.xml, robots.txt
+  matcher: ['/((?!api|_next|_vercel|.*\\..*|opengraph-image|twitter-image|sitemap\\.xml|robots\\.txt).*)']
 };

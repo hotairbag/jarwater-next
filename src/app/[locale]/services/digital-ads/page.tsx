@@ -12,14 +12,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
 
+  const title = t("digitalAdsTitle");
+  const description = t("digitalAdsDescription");
+
   return {
-    title: t("digitalAdsTitle"),
-    description: t("digitalAdsDescription"),
+    title,
+    description,
     alternates: {
       canonical: `https://jarwater.com/${locale === "en" ? "" : locale + "/"}services/digital-ads`,
       languages: Object.fromEntries(
         locales.map((l) => [l, `https://jarwater.com/${l === "en" ? "" : l + "/"}services/digital-ads`])
       ),
+    },
+    openGraph: {
+      title,
+      description,
+      images: [`https://jarwater.com/og/digital-ads-${locale}.svg`],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`https://jarwater.com/og/digital-ads-${locale}.svg`],
     },
   };
 }
