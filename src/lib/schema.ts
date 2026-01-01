@@ -6,13 +6,8 @@ export function getOrganizationSchema() {
     "@type": "Organization",
     name: "Jarwater Motion Studio",
     url: "https://jarwater.com",
-    logo: "https://jarwater.com/logo.png",
+    logo: "https://jarwater.com/favicon.svg",
     description: "High-end motion design, animation, and visual storytelling studio.",
-    sameAs: [
-      "https://vimeo.com/jarwater",
-      "https://instagram.com/jarwater",
-      "https://linkedin.com/company/jarwater",
-    ],
     contactPoint: {
       "@type": "ContactPoint",
       email: "hello@jarwater.com",

@@ -137,8 +137,8 @@ export const Portfolio = ({ isStandalone = true }: PortfolioProps) => {
                   src={project.image}
                   alt={project.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out grayscale group-hover:grayscale-0"
-                  unoptimized
                 />
               </div>
               <div className="flex justify-between items-start border-t border-zinc-800 pt-4">

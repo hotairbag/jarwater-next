@@ -105,35 +105,19 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Connect */}
+          {/* Contact */}
           <div>
             <h4 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">
               {t("connect")}
             </h4>
             <ul className="space-y-2">
               <li>
-                <Link
-                  href="#"
+                <a
+                  href="mailto:hello@jarwater.com"
                   className="text-zinc-500 hover:text-white transition-colors text-sm"
                 >
-                  Instagram
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-zinc-500 hover:text-white transition-colors text-sm"
-                >
-                  Vimeo
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-zinc-500 hover:text-white transition-colors text-sm"
-                >
-                  LinkedIn
-                </Link>
+                  hello@jarwater.com
+                </a>
               </li>
             </ul>
           </div>

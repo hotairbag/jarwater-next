@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { locales } from "@/i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getServiceSchema, getBreadcrumbSchema } from "@/lib/schema";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -42,6 +43,22 @@ export default async function DigitalAdsPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("services.digitalAds");
+  const tMeta = await getTranslations({ locale, namespace: "metadata" });
+  const tNav = await getTranslations({ locale, namespace: "nav" });
+
+  const baseUrl = `https://jarwater.com/${locale === "en" ? "" : locale + "/"}`;
+
+  const serviceSchema = getServiceSchema(
+    tMeta("digitalAdsTitle"),
+    tMeta("digitalAdsDescription"),
+    `${baseUrl}services/digital-ads`
+  );
+
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", url: `https://jarwater.com/${locale === "en" ? "" : locale}` },
+    { name: tNav("services"), url: `${baseUrl}services/digital-ads` },
+    { name: tNav("digitalAds"), url: `${baseUrl}services/digital-ads` },
+  ]);
 
   const types = [
     { title: t("type1Title"), description: t("type1Description") },
@@ -58,7 +75,16 @@ export default async function DigitalAdsPage({ params }: Props) {
   ];
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <div className="min-h-screen bg-zinc-950">
       {/* Hero Section */}
       <section className="relative pt-32 pb-24 px-6 md:px-12">
         <div className="max-w-5xl mx-auto text-center">
@@ -144,6 +170,7 @@ export default async function DigitalAdsPage({ params }: Props) {
           </Link>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }
