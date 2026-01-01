@@ -17,8 +17,8 @@ export async function sendContactEmail(formData: ContactFormData) {
     const { name, email, company, budget, message } = formData;
 
     const { data, error } = await resend.emails.send({
-      from: "Jarwater Contact <onboarding@resend.dev>",
-      to: ["delivered@resend.dev"], // Replace with your email
+      from: "Jarwater <hello@jarwater.com>",
+      to: ["hello@jarwater.com"],
       replyTo: email,
       subject: `New Project Inquiry from ${name}`,
       html: `
