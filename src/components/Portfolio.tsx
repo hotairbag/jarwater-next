@@ -164,6 +164,9 @@ export const Portfolio = ({ isStandalone = true }: PortfolioProps) => {
         <div
           className="fixed inset-0 z-[100] bg-zinc-950/95 backdrop-blur-xl flex items-center justify-center p-4 animate-[fadeIn_1s_ease-out_forwards]"
           onClick={() => setSelectedProject(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
         >
           <div
             className="w-full max-w-6xl flex flex-col"
@@ -171,7 +174,7 @@ export const Portfolio = ({ isStandalone = true }: PortfolioProps) => {
           >
             <div className="flex justify-between items-center mb-6 px-2">
               <div>
-                <h3 className="text-2xl font-serif text-white">
+                <h3 id="modal-title" className="text-2xl font-serif text-white">
                   {selectedProject.title}
                 </h3>
                 <span className="text-zinc-500 text-sm uppercase tracking-widest">
@@ -181,12 +184,14 @@ export const Portfolio = ({ isStandalone = true }: PortfolioProps) => {
               <button
                 onClick={() => setSelectedProject(null)}
                 className="group p-2 rounded-full hover:bg-white/10 transition-colors"
+                aria-label="Close video modal"
               >
                 <svg
                   className="w-8 h-8 text-zinc-400 group-hover:text-white transition-colors"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"

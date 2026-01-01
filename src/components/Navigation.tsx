@@ -25,12 +25,13 @@ export const Navigation = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 py-6 md:px-12 md:py-8 bg-zinc-950/80 backdrop-blur-md border-b border-white/5">
-      <Link href={`/${locale}`} className="flex items-center gap-3 cursor-pointer group">
+      <Link href={`/${locale}`} className="flex items-center gap-3 cursor-pointer group" aria-label="Jarwater Motion Studio - Home">
         <svg
           className="w-8 h-8 text-white group-hover:text-indigo-400 transition-colors duration-300"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
         >
           <path
             d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
@@ -62,33 +63,41 @@ export const Navigation = () => {
           onMouseEnter={() => setIsServicesOpen(true)}
           onMouseLeave={() => setIsServicesOpen(false)}
         >
-          <button className="text-sm uppercase tracking-widest text-zinc-400 hover:text-white transition-all duration-300 flex items-center gap-1">
+          <button
+            className="text-sm uppercase tracking-widest text-zinc-400 hover:text-white transition-all duration-300 flex items-center gap-1"
+            aria-expanded={isServicesOpen}
+            aria-haspopup="true"
+            aria-label={`${t("services")} menu`}
+          >
             {t("services")}
             <svg
               className={`w-3 h-3 transition-transform ${isServicesOpen ? "rotate-180" : ""}`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              aria-hidden="true"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
           </button>
           {isServicesOpen && (
-            <div className="absolute left-0 mt-2 w-56 py-2 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl">
+            <ul className="absolute left-0 mt-2 w-56 py-2 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl" role="menu">
               {serviceItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`block px-4 py-2 text-sm transition-colors ${
-                    pathname === item.href
-                      ? "text-indigo-400 bg-zinc-800"
-                      : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
-                  }`}
-                >
-                  {item.label}
-                </Link>
+                <li key={item.href} role="none">
+                  <Link
+                    role="menuitem"
+                    href={item.href}
+                    className={`block px-4 py-2 text-sm transition-colors ${
+                      pathname === item.href
+                        ? "text-indigo-400 bg-zinc-800"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           )}
         </div>
 

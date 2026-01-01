@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const route of routes) {
     const alternates: Record<string, string> = {};
 
+    // Build alternates for all locales (English without prefix)
     for (const locale of locales) {
       const localePath = locale === "en" ? route : `/${locale}${route}`;
       alternates[locale] = `${baseUrl}${localePath}`;

@@ -1,6 +1,7 @@
 import { Portfolio } from "@/components/Portfolio";
 import { setRequestLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
+import { locales } from "@/i18n/config";
 import type { Metadata } from "next";
 
 type Props = {
@@ -14,6 +15,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${t("title")} | Jarwater Motion Studio`,
     description: t("subtitle"),
+    alternates: {
+      canonical: `https://jarwater.com/${locale === "en" ? "" : locale + "/"}work`,
+      languages: Object.fromEntries(
+        locales.map((l) => [l, `https://jarwater.com/${l === "en" ? "" : l + "/"}work`])
+      ),
+    },
   };
 }
 
