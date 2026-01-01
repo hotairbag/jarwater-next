@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "website",
       images: [
         {
-          url: `https://jarwater.com/og/home-${locale}.svg`,
+          url: `https://jarwater.com/api/og?page=home&locale=${locale}`,
           width: 1200,
           height: 630,
           alt: title,
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
-      images: [`https://jarwater.com/og/home-${locale}.svg`],
+      images: [`https://jarwater.com/api/og?page=home&locale=${locale}`],
     },
   };
 }

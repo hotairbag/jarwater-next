@@ -27,13 +27,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      images: [`https://jarwater.com/og/digital-ads-${locale}.svg`],
+      images: [`https://jarwater.com/api/og?page=digital-ads&locale=${locale}`],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [`https://jarwater.com/og/digital-ads-${locale}.svg`],
+      images: [`https://jarwater.com/api/og?page=digital-ads&locale=${locale}`],
     },
   };
 }

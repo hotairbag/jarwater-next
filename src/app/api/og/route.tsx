@@ -1,16 +1,10 @@
-import { mkdir, writeFile } from "fs/promises";
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
+import { ImageResponse } from "next/og";
+import { NextRequest } from "next/server";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const rootDir = join(__dirname, "..");
-const publicDir = join(rootDir, "public", "og");
+export const runtime = "nodejs"; // Explicitly use Node.js runtime for Cloudflare
+export const dynamic = "force-dynamic";
 
-const locales = [
-  "en", "ja", "ko", "es", "pt-BR", "th", "id", "fr", "zh-CN", "ar", "de", "de-CH", "no", "da"
-];
-
-const titles = {
+const titles: Record<string, Record<string, string>> = {
   home: {
     en: "Motion that moves.",
     ja: "動きで感動を。",
@@ -109,60 +103,113 @@ const titles = {
   },
 };
 
-const pages = Object.keys(titles);
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const page = searchParams.get("page") || "home";
+  const locale = searchParams.get("locale") || "en";
 
-function generateSVG(title, isHome) {
-  const fontSize = isHome ? 64 : 56;
-  const escapedTitle = title
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+  const pageData = titles[page] || titles.home;
+  const title = pageData[locale] || pageData.en;
 
-  return `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#18181b"/>
-      <stop offset="100%" style="stop-color:#09090b"/>
-    </linearGradient>
-  </defs>
-  <rect width="1200" height="630" fill="url(#bg)"/>
-  <!-- Logo circle -->
-  <circle cx="520" cy="220" r="33" fill="#18181b" stroke="#ffffff" stroke-width="1.5"/>
-  <path d="M520 251C534.36 251 546 239.36 546 225C546 210.64 534.36 199 520 199C505.64 199 494 210.64 494 225C494 239.36 505.64 251 520 251Z" stroke="#ffffff" stroke-width="1.5" fill="none"/>
-  <path d="M508 230C508 230 515 222 520 222C525 222 532 230 532 230" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-  <path d="M508 238C508 238 515 230 520 230C525 230 532 238 532 238" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-  <!-- Logo text -->
-  <text x="600" y="235" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="700" fill="#ffffff" letter-spacing="-0.02em">JARWATER</text>
-  <!-- Title -->
-  <text x="600" y="350" font-family="system-ui, -apple-system, sans-serif" font-size="${fontSize}" font-weight="600" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">${escapedTitle}</text>
-  <!-- Subtitle -->
-  <text x="600" y="410" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#a1a1aa" text-anchor="middle">Motion Studio</text>
-  <!-- Accent line -->
-  <rect x="540" y="460" width="120" height="4" fill="#6366f1" rx="2"/>
-</svg>`;
-}
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          background: "linear-gradient(135deg, #18181b 0%, #09090b 100%)",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "system-ui, sans-serif",
+        }}
+      >
+        {/* Logo */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: 40,
+          }}
+        >
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="11" fill="#18181b" />
+            <path
+              d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+              stroke="#ffffff"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M8 13C8 13 10 10 12 10C14 10 16 13 16 13"
+              stroke="#ffffff"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            <path
+              d="M8 16C8 16 10 13 12 13C14 13 16 16 16 16"
+              stroke="#ffffff"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
+          <span
+            style={{
+              fontSize: 48,
+              fontWeight: 700,
+              color: "#ffffff",
+              marginLeft: 20,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            JARWATER
+          </span>
+        </div>
 
-async function generateImages() {
-  console.log("Generating OG images...");
+        {/* Title */}
+        <div
+          style={{
+            fontSize: page === "home" ? 64 : 56,
+            fontWeight: 600,
+            color: "#ffffff",
+            textAlign: "center",
+            maxWidth: 1000,
+            lineHeight: 1.2,
+          }}
+        >
+          {title}
+        </div>
 
-  // Create output directory
-  await mkdir(publicDir, { recursive: true });
+        {/* Subtitle */}
+        <div
+          style={{
+            fontSize: 24,
+            color: "#a1a1aa",
+            marginTop: 24,
+          }}
+        >
+          Motion Studio
+        </div>
 
-  let count = 0;
-  for (const page of pages) {
-    for (const locale of locales) {
-      const title = titles[page][locale] || titles[page].en;
-      const svg = generateSVG(title, page === "home");
-      const filename = `${page}-${locale}.svg`;
-      const filepath = join(publicDir, filename);
-
-      await writeFile(filepath, svg);
-      count++;
+        {/* Accent line */}
+        <div
+          style={{
+            width: 120,
+            height: 4,
+            background: "#6366f1",
+            marginTop: 40,
+            borderRadius: 2,
+          }}
+        />
+      </div>
+    ),
+    {
+      width: 1200,
+      height: 630,
+      headers: {
+        "Cache-Control": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",
+      },
     }
-  }
-
-  console.log(`Generated ${count} OG images in public/og/`);
+  );
 }
-
-generateImages().catch(console.error);

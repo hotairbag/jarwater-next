@@ -90,30 +90,31 @@ Additional schemas available:
 
 ## Image Assets
 
-### Static OG Images
+### Dynamic OG Images
 
-OG images are pre-generated at build time using a Node.js script. Each page has a localized SVG image for all 14 languages (84 total images).
+OG images are generated dynamically using `next/og` (ImageResponse) via an API route.
 
-**Generation Script:** `scripts/generate-og-images.mjs`
+**API Route:** `src/app/api/og/route.tsx`
 
-**Image Location:** `/public/og/{page}-{locale}.svg`
+**URL Pattern:** `/api/og?page={page}&locale={locale}`
 
-| Page | URL Pattern | Example |
-|------|-------------|---------|
-| Homepage | `/og/home-{locale}.svg` | `/og/home-ja.svg` |
-| Work | `/og/work-{locale}.svg` | `/og/work-en.svg` |
-| Contact | `/og/contact-{locale}.svg` | `/og/contact-ko.svg` |
-| Explainers | `/og/explainers-{locale}.svg` | `/og/explainers-fr.svg` |
-| Motion Graphics | `/og/motion-graphics-{locale}.svg` | `/og/motion-graphics-de.svg` |
-| Digital Ads | `/og/digital-ads-{locale}.svg` | `/og/digital-ads-ar.svg` |
+| Page | Example URL |
+|------|-------------|
+| Homepage | `/api/og?page=home&locale=en` |
+| Work | `/api/og?page=work&locale=ja` |
+| Contact | `/api/og?page=contact&locale=ko` |
+| Explainers | `/api/og?page=explainers&locale=fr` |
+| Motion Graphics | `/api/og?page=motion-graphics&locale=de` |
+| Digital Ads | `/api/og?page=digital-ads&locale=ar` |
 
 **Image Specs:**
 - Size: 1200x630px
-- Format: SVG
+- Format: PNG (generated on-demand)
+- Runtime: Node.js (required for Cloudflare Workers)
+- Caching: `s-maxage=86400` (CDN caches for 24 hours)
 - Features: Jarwater logo, localized page title, dark gradient background
-- Build: Generated automatically via `prebuild` script
 
-**Note:** Dynamic OG image generation via `next/og` API routes is not supported on Cloudflare Workers with `@opennextjs/cloudflare`, hence the static SVG approach.
+**Important for Cloudflare Workers:** The API route uses `runtime = "nodejs"` explicitly, as edge runtime is not supported by `@opennextjs/cloudflare` for API routes.
 
 ### Static Assets
 
@@ -201,7 +202,7 @@ Implemented accessibility improvements that also benefit SEO:
 - `src/app/robots.ts` - Robots.txt configuration
 - `src/lib/schema.ts` - JSON-LD schema utilities
 - `src/components/SchemaScript.tsx` - Schema injection component
-- `scripts/generate-og-images.mjs` - OG image generation script
+- `src/app/api/og/route.tsx` - Dynamic OG image generation
 
 ### Layout & Metadata
 - `src/app/[locale]/layout.tsx` - Main layout with OG/Twitter/icons
