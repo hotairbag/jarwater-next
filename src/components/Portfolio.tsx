@@ -10,7 +10,7 @@ interface PortfolioProps {
 
 export const Portfolio = ({ isStandalone = true }: PortfolioProps) => {
   const [selectedProject, setSelectedProject] = useState<
-    (Project & { videoUrl?: string }) | null
+    (Project & { videoUrl?: string; vimeoId?: string }) | null
   >(null);
 
   useEffect(() => {
@@ -24,15 +24,14 @@ export const Portfolio = ({ isStandalone = true }: PortfolioProps) => {
     };
   }, [selectedProject]);
 
-  const projects: (Project & { videoUrl: string })[] = [
+  const projects: (Project & { videoUrl?: string; vimeoId?: string })[] = [
     {
       id: "1",
-      title: "Neon Horizon",
+      title: "Miami Magic Journey",
       category: "Brand Film",
       image: "https://picsum.photos/id/132/800/600",
-      description: "A synthwave inspired journey for a fintech unicorn.",
-      videoUrl:
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      description: "A vibrant visual journey through Miami's magic.",
+      vimeoId: "1150790609",
     },
     {
       id: "2",
@@ -190,14 +189,23 @@ export const Portfolio = ({ isStandalone = true }: PortfolioProps) => {
             </div>
 
             <div className="relative aspect-video bg-black shadow-2xl rounded-sm overflow-hidden border border-zinc-800">
-              <video
-                src={selectedProject.videoUrl}
-                controls
-                autoPlay
-                className="w-full h-full object-contain"
-              >
-                Your browser does not support the video tag.
-              </video>
+              {selectedProject.vimeoId ? (
+                <iframe
+                  src={`https://player.vimeo.com/video/${selectedProject.vimeoId}?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1`}
+                  allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                  className="absolute top-0 left-0 w-full h-full"
+                  title={selectedProject.title}
+                />
+              ) : (
+                <video
+                  src={selectedProject.videoUrl}
+                  controls
+                  autoPlay
+                  className="w-full h-full object-contain"
+                >
+                  Your browser does not support the video tag.
+                </video>
+              )}
             </div>
 
             <div className="mt-6 px-2">
