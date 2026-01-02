@@ -8,8 +8,8 @@ export default createMiddleware({
   // Used when no locale matches
   defaultLocale,
 
-  // Auto-detect the locale based on Accept-Language header
-  localeDetection: true,
+  // Disable auto-detection to avoid potential delays with Accept-Language parsing
+  localeDetection: false,
 
   // Prefix the default locale as well (optional, but good for SEO)
   localePrefix: 'as-needed'

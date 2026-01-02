@@ -12,6 +12,7 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
+  display: "swap",
 });
 
 const playfair = Playfair_Display({
@@ -19,6 +20,7 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "600"],
   style: ["normal", "italic"],
+  display: "swap",
 });
 
 type Props = {
